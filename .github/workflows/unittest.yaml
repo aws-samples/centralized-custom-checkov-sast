@@ -1,0 +1,31 @@
+# This workflow will run unit tests for Checkov Custom Checks
+# To run integrated tests, you can use a command like the following and review the output:
+# checkov -d .\external_checks\test\ --config-file .\.checkov.yml --external-checks-dir .\external_checks\
+
+# To run unit checks manually, run the commands in the 'Run Unit Tests' step of the workflow
+
+name: Run Checkov Custom Check Unit Tests
+
+on:
+  pull_request:
+    branches: main
+
+jobs:
+  unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: "0"
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Run Unit Tests
+        run: |
+          pip install checkov
+          cd external_checks
+          python -m unittest discover -s . -p "*_test.py" -v

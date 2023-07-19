@@ -1,0 +1,61 @@
+# Reusable Checkov workflow with custom support
+
+######################
+# STEPS BEFORE REUSING
+# 1. In the step 'Check Out Checkov Custom Rules', update the repository Org/name to the repo containing the Checkov custom rules.
+# 2. Create a secret (preferably Organization-wide secret, if you pay for GitLab) containing a PAT with read-only access to your GitHub Organization's repos. Ensure that the secret name matches the name used in the step 'Check Out Checkov Custom Rules'.
+# 3. In the step 'Checkov GitHub Action', ensure that the config_file location is accurate. The default of 'centralCheckov/.checkov.yml' assumes that the Configuration file is at the root of the custom Checkov repository, and that you are checking out that repository to the path of 'centralCheckov'.
+
+######################
+
+name: Checkov
+
+on:
+  # Reusable
+  workflow_call:
+
+jobs:
+  scan:
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the consumer's current repo
+      - uses: actions/checkout@v3
+        name: Check Out Current Repo
+
+      # Must also check out the centralized Checkov repo
+      - uses: actions/checkout@v3
+        name: Check Out Checkov Custom Rules
+        with:
+          repository: MyGitHubOrganizationName/custom-checkov
+          path: centralCheckov
+          token: ${{ secrets.ORG_PAT }}
+
+      - name: Checkov GitHub Action
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          skip_check: "" # To globally skip specific rules, add them in a comma-separated list like so: "CKV_AWS_50,CKV_AWS_51"
+          quiet: true # Will only display failed checks
+          soft_fail: false # If set to true, will not fail the pipeline if security issues are found
+          download_external_modules: true
+          config_file: centralCheckov/.checkov.yml # This is a reference to the Configuration file with custom checks
+          # # This will add both a CLI output to the console and create a results.sarif file
+          # output_format: cli,sarif
+          # output_file_path: console,results.sarif
+# This step is currently commented out because it requires GitHub Advanced Security. If you pay for that, feel free to add it back.
+#       - name: Upload SARIF file
+#         uses: github/codeql-action/upload-sarif@v2
+
+#         # Results are generated only on a success or failure
+#         # this is required since GitHub by default won't run the next step
+#         # when the previous one has failed. Security checks that do not pass will 'fail'.
+#         # An alternative is to add `continue-on-error: true` to the previous step
+#         # Or 'soft_fail: true' to checkov.
+#         if: success() || failure()
+#         with:
+#           sarif_file: results.sarif

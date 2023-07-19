@@ -1,0 +1,12 @@
+# NOTE: Paths like './centralCheckov' are assuming that this repository is checked out to the path 'centralCheckov'. This can be adapted if necessary.
+external-checks-dir:
+  - ./centralCheckov/external_checks # This assumes that the action is running in root and the centralized-checkov-sast repo has been checked out to the centralized-checkov-sast directory
+framework: terraform
+download-external-modules: true
+quiet: true
+skip-path: ./centralCheckov/external_checks/test # don't run checkov on the unit test examples
+# Comma-separated list of rules that should be skipped organization-wide
+# CKV_AWS_50 - XRay tracing should not be required
+# CKV_AWS_144 - Bucket replication is unnecessary in many cases
+skip-check: "CKV_AWS_50,CKV_AWS_144"
+soft-fail: false
