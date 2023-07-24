@@ -1,0 +1,14 @@
+---
+metadata:
+  name: "Check that all KMS keys have an associated alias"
+  id: "CKV2_CUSTOM_020"
+  category: "SECRETS"
+scope:
+  provider: AWS
+definition:
+  cond_type: "connection"
+  resource_types:
+    - "aws_kms_key"
+  connected_resource_types:
+    - "aws_kms_alias"
+  operator: "exists"
