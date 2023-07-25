@@ -24,17 +24,17 @@ This repo can be checked out during a workflow and used to run standard Checkov 
 
 ### Checkov Configuration File
 
-The file .checkov.yml is a Checkov configuration file that defines the parameters that should be used when running Checkov.
+The file `.checkov.yml` is a Checkov configuration file that defines the parameters that should be used when running Checkov.
 
 ### Checkov Custom Checks
 
-Checkov custom checks should be added to the `external_checks` directory. Two example rules are added to start.
+Checkov custom checks should be added to the `custom_checks` directory. Two example rules are added to start.
 
 The Checkov configuration file will reference this directory to run the checks during the Checkov action.
 
 For more details on custom checks, see: https://www.checkov.io/3.Custom%20Policies/Custom%20Policies%20Overview.html
 
-#### Custom Check Naming
+#### Custom Check Naming Convention
 
 Your custom check should start with `custom_`, followed by a unique three-digit number, followed by a `snake_case` description of what the check looks for.
 
@@ -47,13 +47,13 @@ Python checks should have a `check = <NameOfYourCheckClass>()` line at the the v
 To create a unit test for a Python-based custom check, do the following:
 
 1. Create a python file ending in `_test.py` instead of just `.py`.
-2. Update the `./external_checks/test` folder with Terraform resources that represent known-good or known-bad states for your test's consumption.
+2. Update the `./custom_checks/test` folder with Terraform resources that represent known-good or known-bad states for your test's consumption.
 3. Extend the `unittest.TestCase` class to write your unit test class (you can copy an existing unit test for the framework and update it). Add methods for each test you want to perform.
 4. Run the test using the commands from the `unittest.yaml` workflow.
 
 ### Example Usage
 
-See `checkov.yaml` in the `github_workflows` directory for an example that can be added to your repo's `workflows` folder.
+See `checkov-scan.yaml` in the `github_workflows` directory for an example that can be added to your repo's `workflows` folder.
 
 ### Handling Checkov False Positives
 
