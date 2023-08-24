@@ -3,7 +3,7 @@
 ######################
 # STEPS BEFORE REUSING
 # 1. In the step 'Check Out Checkov Custom Rules', update the repository Org/name to the repo containing the Checkov custom rules.
-# 2. Create a secret (preferably Organization-wide secret, if you pay for GitLab) containing a PAT with read-only access to your GitHub Organization's repos. Ensure that the secret name matches the name used in the step 'Check Out Checkov Custom Rules'.
+# 2. Create a secret (preferably Organization-wide secret, if you pay for GitHub) containing a PAT with read-only access to your GitHub Organization's repos. Ensure that the secret name matches the name used in the step 'Check Out Checkov Custom Rules'.
 # 3. In the step 'Checkov GitHub Action', ensure that the config_file location is accurate. The default of 'centralCheckov/.checkov.yml' assumes that the Configuration file is at the root of the custom Checkov repository, and that you are checking out that repository to the path of 'centralCheckov'.
 
 ######################
