@@ -28,7 +28,7 @@ The file `.checkov.yml` is a Checkov configuration file that defines the paramet
 
 ### Checkov Custom Checks
 
-Checkov custom checks should be added to the `custom_checks` directory. Two example rules are added to start.
+Checkov custom checks should be added to the `custom_policies` directory. Two example rules are added to start.
 
 The Checkov configuration file will reference this directory to run the checks during the Checkov action.
 
@@ -47,7 +47,7 @@ Python checks should have a `check = <NameOfYourCheckClass>()` line at the the v
 To create a unit test for a Python-based custom check, do the following:
 
 1. Create a python file ending in `_test.py` instead of just `.py`.
-2. Update the `./custom_checks/test` folder with Terraform resources that represent known-good or known-bad states for your test's consumption.
+2. Update the `./custom_policies/test` folder with Terraform resources that represent known-good or known-bad states for your test's consumption.
 3. Extend the `unittest.TestCase` class to write your unit test class (you can copy an existing unit test for the framework and update it). Add methods for each test you want to perform.
 4. Run the test using the commands from the `unittest.yaml` workflow.
 
